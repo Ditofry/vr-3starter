@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Getting Started with Three.js</title>
+		<style>
+			#container {
+				/*(1) Specify the canvas size*/
+				background: #000;
+				border: 1px solid black;
+				width: 800px;
+				height: 600px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+	</body>
+	<script type="x-shader/x-vertex" id="vertexshader">
+		/**
+		 * (1) Create a shared variable for the VS and FS containing the normal
+		 */
+		varying vec3 vNormal;
+
+		void main()
+		{
+			/**
+			 *  (2) Set the normal value with the attribute value passed in by Three.js
+			 */
+			 vNormal = normal;
+			 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+		}
+	</script>
+
+	<script type="x-shader/x-fragment" id="fragmentshader">
+		/**
+ 			* (3) Create a variable for the FS containing the normal
+				(same type and name that you used for the VS)
+ 			*/
+		varying vec3 vNormal;
+
+		void main()
+		{
+			/**
+			 * (4) Calculate light shining above and to the right
+			 */
+		  vec3 light = vec3(0.5, 0.2, 1.0);
+		  light = normalize(light);
+			/**
+			 * (5) Calculate fragment colour based on light, angle of incidence,
+			 *     and base vertex colour
+			*/
+		  float dProd = max(0.0, dot(vNormal, light));
+		  gl_FragColor = vec4(dProd, dProd, dProd, 1.0);
+		}
+	</script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+  <script src="http://threejs.org/build/three.min.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+
+</html>
